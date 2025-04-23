@@ -131,14 +131,14 @@ class DatabaseConfig(BaseSettings):
 
     @computed_field
     def SQLALCHEMY_DATABASE_URI(self) -> str:
-        db_extras = (
-            f"{self.DB_EXTRAS}&client_encoding={self.DB_CHARSET}" if self.DB_CHARSET else self.DB_EXTRAS
-        ).strip("&")
-        db_extras = f"?{db_extras}" if db_extras else ""
+        # db_extras = (
+        #     f"{self.DB_EXTRAS}&client_encoding={self.DB_CHARSET}" if self.DB_CHARSET else self.DB_EXTRAS
+        # ).strip("&")
+        # db_extras = f"?{db_extras}" if db_extras else ""
         return (
             f"{self.SQLALCHEMY_DATABASE_URI_SCHEME}://"
             f"{quote_plus(self.DB_USERNAME)}:{quote_plus(self.DB_PASSWORD)}@{self.DB_HOST}:{self.DB_PORT}/{self.DB_DATABASE}"
-            f"{db_extras}"
+            f"?charset=utf8mb4"
         )
 
     SQLALCHEMY_POOL_SIZE: NonNegativeInt = Field(
@@ -172,8 +172,8 @@ class DatabaseConfig(BaseSettings):
             "pool_size": self.SQLALCHEMY_POOL_SIZE,
             "max_overflow": self.SQLALCHEMY_MAX_OVERFLOW,
             "pool_recycle": self.SQLALCHEMY_POOL_RECYCLE,
-            "pool_pre_ping": self.SQLALCHEMY_POOL_PRE_PING,
-            "connect_args": {"options": "-c timezone=UTC"},
+            "pool_pre_ping": self.SQLALCHEMY_POOL_PRE_PING
+            #"connect_args": {"options": "-c timezone=UTC"},
         }
 
 
