@@ -1,4 +1,5 @@
 import enum
+from uuid import uuid4
 
 from sqlalchemy import func
 
@@ -20,7 +21,7 @@ class APIBasedExtension(db.Model):  # type: ignore[name-defined]
         db.Index("api_based_extension_tenant_idx", "tenant_id"),
     )
 
-    id = db.Column(StringUUID, server_default=db.text("uuid_generate_v4()"))
+    id = db.Column(StringUUID, primary_key=True, default=str(uuid4()))
     tenant_id = db.Column(StringUUID, nullable=False)
     name = db.Column(db.String(255), nullable=False)
     api_endpoint = db.Column(db.String(255), nullable=False)
