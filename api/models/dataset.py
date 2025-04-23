@@ -10,16 +10,14 @@ import re
 import time
 from json import JSONDecodeError
 from typing import Any, cast
-from uuid import uuid4
-
-from sqlalchemy import func
-from sqlalchemy.dialects.postgresql import JSONB
-from sqlalchemy.orm import Mapped
 
 from configs import dify_config
 from core.rag.retrieval.retrieval_methods import RetrievalMethod
 from extensions.ext_storage import storage
 from services.entities.knowledge_entities.knowledge_entities import ParentMode, Rule
+from sqlalchemy import func
+from sqlalchemy.dialects.postgresql import JSONB
+from sqlalchemy.orm import Mapped
 
 from .account import Account
 from .engine import db
@@ -44,7 +42,7 @@ class Dataset(db.Model):  # type: ignore[name-defined]
     INDEXING_TECHNIQUE_LIST = ["high_quality", "economy", None]
     PROVIDER_LIST = ["vendor", "external", None]
 
-    id = db.Column(StringUUID, primary_key=True, default=str(uuid4()))
+    id = db.Column(StringUUID, primary_key=True, server_default=db.text("UUID()"))
     tenant_id = db.Column(StringUUID, nullable=False)
     name = db.Column(db.String(255), nullable=False)
     description = db.Column(db.Text, nullable=True)
@@ -921,7 +919,7 @@ class DatasetAutoDisableLog(db.Model):  # type: ignore[name-defined]
         db.Index("dataset_auto_disable_log_created_atx", "created_at"),
     )
 
-    id = db.Column(StringUUID, primary_key=True, default=str(uuid4()))
+    id = db.Column(StringUUID, primary_key=True, server_default=db.text("UUID()"))
     tenant_id = db.Column(StringUUID, nullable=False)
     dataset_id = db.Column(StringUUID, nullable=False)
     document_id = db.Column(StringUUID, nullable=False)

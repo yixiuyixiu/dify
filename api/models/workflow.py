@@ -3,19 +3,17 @@ from collections.abc import Mapping, Sequence
 from datetime import UTC, datetime
 from enum import Enum, StrEnum
 from typing import TYPE_CHECKING, Any, Optional, Union
-from uuid import uuid4
-
-import sqlalchemy as sa
-from sqlalchemy import func
-from sqlalchemy.orm import Mapped, mapped_column
 
 import contexts
+import sqlalchemy as sa
 from constants import HIDDEN_VALUE
 from core.helper import encrypter
 from core.variables import SecretVariable, Variable
 from factories import variable_factory
 from libs import helper
 from models.enums import CreatedByRole
+from sqlalchemy import func
+from sqlalchemy.orm import Mapped, mapped_column
 
 from .account import Account
 from .engine import db
@@ -99,7 +97,7 @@ class Workflow(db.Model):  # type: ignore[name-defined]
         db.Index("workflow_version_idx", "tenant_id", "app_id", "version"),
     )
 
-    id = db.Column(StringUUID, primary_key=True, default=str(uuid4()))
+    id = db.Column(StringUUID, primary_key=True, server_default=db.text("UUID()"))
     tenant_id: Mapped[str] = mapped_column(StringUUID, nullable=False)
     app_id: Mapped[str] = mapped_column(StringUUID, nullable=False)
     type: Mapped[str] = mapped_column(db.String(255), nullable=False)
@@ -393,7 +391,7 @@ class WorkflowRun(db.Model):  # type: ignore[name-defined]
         db.Index("workflow_run_tenant_app_sequence_idx", "tenant_id", "app_id", "sequence_number"),
     )
 
-    id = db.Column(StringUUID, primary_key=True, default=str(uuid4()))
+    id = db.Column(StringUUID, primary_key=True, server_default=db.text("UUID()"))
     tenant_id: Mapped[str] = mapped_column(StringUUID)
     app_id: Mapped[str] = mapped_column(StringUUID)
     sequence_number: Mapped[int] = mapped_column()
@@ -622,7 +620,7 @@ class WorkflowNodeExecution(db.Model):  # type: ignore[name-defined]
         ),
     )
 
-    id = db.Column(StringUUID, primary_key=True, default=str(uuid4()))
+    id = db.Column(StringUUID, primary_key=True, server_default=db.text("UUID()"))
     tenant_id: Mapped[str] = mapped_column(StringUUID)
     app_id: Mapped[str] = mapped_column(StringUUID)
     workflow_id: Mapped[str] = mapped_column(StringUUID)
@@ -751,7 +749,7 @@ class WorkflowAppLog(db.Model):  # type: ignore[name-defined]
         db.Index("workflow_app_log_app_idx", "tenant_id", "app_id"),
     )
 
-    id = db.Column(StringUUID, primary_key=True, default=str(uuid4()))
+    id = db.Column(StringUUID, primary_key=True, server_default=db.text("UUID()"))
     tenant_id: Mapped[str] = mapped_column(StringUUID)
     app_id: Mapped[str] = mapped_column(StringUUID)
     workflow_id = db.Column(StringUUID, nullable=False)

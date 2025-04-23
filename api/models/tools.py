@@ -1,14 +1,12 @@
 import json
 from typing import Any, Optional
-from uuid import uuid4
 
 import sqlalchemy as sa
-from sqlalchemy import ForeignKey, func
-from sqlalchemy.orm import Mapped, mapped_column
-
 from core.tools.entities.common_entities import I18nObject
 from core.tools.entities.tool_bundle import ApiToolBundle
 from core.tools.entities.tool_entities import ApiProviderSchemaType, WorkflowToolParameterConfiguration
+from sqlalchemy import ForeignKey, func
+from sqlalchemy.orm import Mapped, mapped_column
 
 from .engine import db
 from .model import Account, App, Tenant
@@ -28,7 +26,7 @@ class BuiltinToolProvider(db.Model):  # type: ignore[name-defined]
     )
 
     # id of the tool provider
-    id = db.Column(StringUUID, primary_key=True, default=str(uuid4()))
+    id = db.Column(StringUUID, primary_key=True, server_default=db.text("UUID()"))
     # id of the tenant
     tenant_id = db.Column(StringUUID, nullable=True)
     # who created this tool provider
@@ -57,7 +55,7 @@ class PublishedAppTool(db.Model):  # type: ignore[name-defined]
     )
 
     # id of the tool provider
-    id = db.Column(StringUUID, primary_key=True, default=str(uuid4()))
+    id = db.Column(StringUUID, primary_key=True, server_default=db.text("UUID()"))
     # id of the app
     app_id = db.Column(StringUUID, ForeignKey("apps.id"), nullable=False)
     # who published this tool
@@ -98,7 +96,7 @@ class ApiToolProvider(db.Model):  # type: ignore[name-defined]
         db.UniqueConstraint("name", "tenant_id", name="unique_api_tool_provider"),
     )
 
-    id = db.Column(StringUUID, primary_key=True, default=str(uuid4()))
+    id = db.Column(StringUUID, primary_key=True, server_default=db.text("UUID()"))
     # name of the api provider
     name = db.Column(db.String(40), nullable=False)
     # icon
@@ -156,7 +154,7 @@ class ToolLabelBinding(db.Model):  # type: ignore[name-defined]
         db.UniqueConstraint("tool_id", "label_name", name="unique_tool_label_bind"),
     )
 
-    id = db.Column(StringUUID, primary_key=True, default=str(uuid4()))
+    id = db.Column(StringUUID, primary_key=True, server_default=db.text("UUID()"))
     # tool id
     tool_id = db.Column(db.String(64), nullable=False)
     # tool type
@@ -177,7 +175,7 @@ class WorkflowToolProvider(db.Model):  # type: ignore[name-defined]
         db.UniqueConstraint("tenant_id", "app_id", name="unique_workflow_tool_provider_app_id"),
     )
 
-    id = db.Column(StringUUID, primary_key=True, default=str(uuid4()))
+    id = db.Column(StringUUID, primary_key=True, server_default=db.text("UUID()"))
     # name of the workflow provider
     name = db.Column(db.String(40), nullable=False)
     # label of the workflow provider
@@ -227,7 +225,7 @@ class ToolModelInvoke(db.Model):  # type: ignore[name-defined]
     __tablename__ = "tool_model_invokes"
     __table_args__ = (db.PrimaryKeyConstraint("id", name="tool_model_invoke_pkey"),)
 
-    id = db.Column(StringUUID, primary_key=True, default=str(uuid4()))
+    id = db.Column(StringUUID, primary_key=True, server_default=db.text("UUID()"))
     # who invoke this tool
     user_id = db.Column(StringUUID, nullable=False)
     # tenant id
@@ -269,7 +267,7 @@ class ToolConversationVariables(db.Model):  # type: ignore[name-defined]
         db.Index("conversation_id_idx", "conversation_id"),
     )
 
-    id = db.Column(StringUUID, primary_key=True, default=str(uuid4()))
+    id = db.Column(StringUUID, primary_key=True, server_default=db.text("UUID()"))
     # conversation user id
     user_id = db.Column(StringUUID, nullable=False)
     # tenant id
@@ -294,7 +292,7 @@ class ToolFile(db.Model):  # type: ignore[name-defined]
         db.Index("tool_file_conversation_id_idx", "conversation_id"),
     )
 
-    id = db.Column(StringUUID, primary_key=True, default=str(uuid4()))
+    id = db.Column(StringUUID, primary_key=True, server_default=db.text("UUID()"))
     user_id: Mapped[str] = db.Column(StringUUID, nullable=False)
     tenant_id: Mapped[str] = db.Column(StringUUID, nullable=False)
     conversation_id: Mapped[Optional[str]] = db.Column(StringUUID, nullable=True)
