@@ -1,5 +1,6 @@
 from sqlalchemy import func
 from sqlalchemy.orm import Mapped, mapped_column
+from uuid import uuid4
 
 from .engine import db
 from .model import Message

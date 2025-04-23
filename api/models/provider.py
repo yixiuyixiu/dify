@@ -1,6 +1,7 @@
 from enum import Enum
 
 from sqlalchemy import func
+from uuid import uuid4
 
 from .engine import db
 from .types import StringUUID

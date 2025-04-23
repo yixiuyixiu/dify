@@ -2,6 +2,7 @@ import json
 
 from sqlalchemy import func
 from sqlalchemy.dialects.postgresql import JSONB
+from uuid import uuid4
 
 from .engine import db
 from .types import StringUUID

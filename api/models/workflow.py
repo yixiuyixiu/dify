@@ -3,6 +3,7 @@ from collections.abc import Mapping, Sequence
 from datetime import UTC, datetime
 from enum import Enum, StrEnum
 from typing import TYPE_CHECKING, Any, Optional, Union
+from uuid import uuid4
 
 import sqlalchemy as sa
 from sqlalchemy import func

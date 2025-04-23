@@ -10,6 +10,7 @@ import re
 import time
 from json import JSONDecodeError
 from typing import Any, cast
+from uuid import uuid4
 
 from sqlalchemy import func
 from sqlalchemy.dialects.postgresql import JSONB

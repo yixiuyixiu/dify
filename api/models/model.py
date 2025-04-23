@@ -5,6 +5,7 @@ from collections.abc import Mapping
 from datetime import datetime
 from enum import Enum, StrEnum
 from typing import TYPE_CHECKING, Any, Literal, Optional, cast
+from uuid import uuid4
 
 import sqlalchemy as sa
 from flask import request
