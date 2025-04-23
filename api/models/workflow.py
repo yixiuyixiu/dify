@@ -3,6 +3,7 @@ from collections.abc import Mapping, Sequence
 from datetime import UTC, datetime
 from enum import Enum, StrEnum
 from typing import TYPE_CHECKING, Any, Optional, Union
+from uuid import uuid4
 
 import contexts
 import sqlalchemy as sa
@@ -97,7 +98,7 @@ class Workflow(db.Model):  # type: ignore[name-defined]
         db.Index("workflow_version_idx", "tenant_id", "app_id", "version"),
     )
 
-    id = db.Column(StringUUID, primary_key=True, server_default=db.text("UUID()"))
+    id = db.Column(StringUUID, primary_key=True, default=str(uuid4()))
     tenant_id: Mapped[str] = mapped_column(StringUUID, nullable=False)
     app_id: Mapped[str] = mapped_column(StringUUID, nullable=False)
     type: Mapped[str] = mapped_column(db.String(255), nullable=False)
@@ -391,7 +392,7 @@ class WorkflowRun(db.Model):  # type: ignore[name-defined]
         db.Index("workflow_run_tenant_app_sequence_idx", "tenant_id", "app_id", "sequence_number"),
     )
 
-    id = db.Column(StringUUID, primary_key=True, server_default=db.text("UUID()"))
+    id = db.Column(StringUUID, primary_key=True, default=str(uuid4()))
     tenant_id: Mapped[str] = mapped_column(StringUUID)
     app_id: Mapped[str] = mapped_column(StringUUID)
     sequence_number: Mapped[int] = mapped_column()
@@ -620,7 +621,7 @@ class WorkflowNodeExecution(db.Model):  # type: ignore[name-defined]
         ),
     )
 
-    id = db.Column(StringUUID, primary_key=True, server_default=db.text("UUID()"))
+    id = db.Column(StringUUID, primary_key=True, default=str(uuid4()))
     tenant_id: Mapped[str] = mapped_column(StringUUID)
     app_id: Mapped[str] = mapped_column(StringUUID)
     workflow_id: Mapped[str] = mapped_column(StringUUID)
@@ -749,7 +750,7 @@ class WorkflowAppLog(db.Model):  # type: ignore[name-defined]
         db.Index("workflow_app_log_app_idx", "tenant_id", "app_id"),
     )
 
-    id = db.Column(StringUUID, primary_key=True, server_default=db.text("UUID()"))
+    id = db.Column(StringUUID, primary_key=True, default=str(uuid4()))
     tenant_id: Mapped[str] = mapped_column(StringUUID)
     app_id: Mapped[str] = mapped_column(StringUUID)
     workflow_id = db.Column(StringUUID, nullable=False)

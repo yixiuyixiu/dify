@@ -5,6 +5,7 @@ from collections.abc import Mapping
 from datetime import datetime
 from enum import Enum, StrEnum
 from typing import TYPE_CHECKING, Any, Literal, Optional, cast
+from uuid import uuid4
 
 import sqlalchemy as sa
 from configs import dify_config
@@ -66,7 +67,7 @@ class App(db.Model):  # type: ignore[name-defined]
     __tablename__ = "apps"
     __table_args__ = (db.PrimaryKeyConstraint("id", name="app_pkey"), db.Index("app_tenant_id_idx", "tenant_id"))
 
-    id = db.Column(StringUUID, primary_key=True, server_default=db.text("UUID()"))
+    id = db.Column(StringUUID, primary_key=True, default=str(uuid4()))
     tenant_id: Mapped[str] = db.Column(StringUUID, nullable=False)
     name = db.Column(db.String(255), nullable=False)
     description = db.Column(db.Text, nullable=False, server_default=db.text("''::character varying"))
@@ -222,7 +223,7 @@ class AppModelConfig(db.Model):  # type: ignore[name-defined]
     __tablename__ = "app_model_configs"
     __table_args__ = (db.PrimaryKeyConstraint("id", name="app_model_config_pkey"), db.Index("app_app_id_idx", "app_id"))
 
-    id = db.Column(StringUUID, primary_key=True, server_default=db.text("UUID()"))
+    id = db.Column(StringUUID, primary_key=True, default=str(uuid4()))
     app_id = db.Column(StringUUID, nullable=False)
     provider = db.Column(db.String(255), nullable=True)
     model_id = db.Column(db.String(255), nullable=True)
@@ -502,7 +503,7 @@ class InstalledApp(db.Model):  # type: ignore[name-defined]
         db.UniqueConstraint("tenant_id", "app_id", name="unique_tenant_app"),
     )
 
-    id = db.Column(StringUUID, primary_key=True, server_default=db.text("UUID()"))
+    id = db.Column(StringUUID, primary_key=True, default=str(uuid4()))
     tenant_id = db.Column(StringUUID, nullable=False)
     app_id = db.Column(StringUUID, nullable=False)
     app_owner_tenant_id = db.Column(StringUUID, nullable=False)
@@ -529,7 +530,7 @@ class Conversation(db.Model):  # type: ignore[name-defined]
         db.Index("conversation_app_from_user_idx", "app_id", "from_source", "from_end_user_id"),
     )
 
-    id = db.Column(StringUUID, primary_key=True, server_default=db.text("UUID()"))
+    id = db.Column(StringUUID, primary_key=True, default=str(uuid4()))
     app_id = db.Column(StringUUID, nullable=False)
     app_model_config_id = db.Column(StringUUID, nullable=True)
     model_provider = db.Column(db.String(255), nullable=True)
@@ -769,7 +770,7 @@ class Message(db.Model):  # type: ignore[name-defined]
         db.Index("message_created_at_idx", "created_at"),
     )
 
-    id = db.Column(StringUUID, primary_key=True, server_default=db.text("UUID()"))
+    id = db.Column(StringUUID, primary_key=True, default=str(uuid4()))
     app_id = db.Column(StringUUID, nullable=False)
     model_provider = db.Column(db.String(255), nullable=True)
     model_id = db.Column(db.String(255), nullable=True)
@@ -1117,7 +1118,7 @@ class MessageFeedback(db.Model):  # type: ignore[name-defined]
         db.Index("message_feedback_conversation_idx", "conversation_id", "from_source", "rating"),
     )
 
-    id = db.Column(StringUUID, primary_key=True, server_default=db.text("UUID()"))
+    id = db.Column(StringUUID, primary_key=True, default=str(uuid4()))
     app_id = db.Column(StringUUID, nullable=False)
     conversation_id = db.Column(StringUUID, nullable=False)
     message_id = db.Column(StringUUID, nullable=False)
@@ -1185,7 +1186,7 @@ class MessageAnnotation(db.Model):  # type: ignore[name-defined]
         db.Index("message_annotation_message_idx", "message_id"),
     )
 
-    id = db.Column(StringUUID, primary_key=True, server_default=db.text("UUID()"))
+    id = db.Column(StringUUID, primary_key=True, default=str(uuid4()))
     app_id = db.Column(StringUUID, nullable=False)
     conversation_id = db.Column(StringUUID, db.ForeignKey("conversations.id"), nullable=True)
     message_id = db.Column(StringUUID, nullable=True)
@@ -1217,7 +1218,7 @@ class AppAnnotationHitHistory(db.Model):  # type: ignore[name-defined]
         db.Index("app_annotation_hit_histories_message_idx", "message_id"),
     )
 
-    id = db.Column(StringUUID, primary_key=True, server_default=db.text("UUID()"))
+    id = db.Column(StringUUID, primary_key=True, default=str(uuid4()))
     app_id = db.Column(StringUUID, nullable=False)
     annotation_id = db.Column(StringUUID, nullable=False)
     source = db.Column(db.Text, nullable=False)
@@ -1252,7 +1253,7 @@ class AppAnnotationSetting(db.Model):  # type: ignore[name-defined]
         db.Index("app_annotation_settings_app_idx", "app_id"),
     )
 
-    id = db.Column(StringUUID, primary_key=True, server_default=db.text("UUID()"))
+    id = db.Column(StringUUID, primary_key=True, default=str(uuid4()))
     app_id = db.Column(StringUUID, nullable=False)
     score_threshold = db.Column(Float, nullable=False, server_default=db.text("0"))
     collection_binding_id = db.Column(StringUUID, nullable=False)
@@ -1300,7 +1301,7 @@ class OperationLog(db.Model):  # type: ignore[name-defined]
         db.Index("operation_log_account_action_idx", "tenant_id", "account_id", "action"),
     )
 
-    id = db.Column(StringUUID, primary_key=True, server_default=db.text("UUID()"))
+    id = db.Column(StringUUID, primary_key=True, default=str(uuid4()))
     tenant_id = db.Column(StringUUID, nullable=False)
     account_id = db.Column(StringUUID, nullable=False)
     action = db.Column(db.String(255), nullable=False)
@@ -1318,7 +1319,7 @@ class EndUser(UserMixin, db.Model):  # type: ignore[name-defined]
         db.Index("end_user_tenant_session_id_idx", "tenant_id", "session_id", "type"),
     )
 
-    id = db.Column(StringUUID, primary_key=True, server_default=db.text("UUID()"))
+    id = db.Column(StringUUID, primary_key=True, default=str(uuid4()))
     tenant_id = db.Column(StringUUID, nullable=False)
     app_id = db.Column(StringUUID, nullable=True)
     type = db.Column(db.String(255), nullable=False)
@@ -1338,7 +1339,7 @@ class Site(db.Model):  # type: ignore[name-defined]
         db.Index("site_code_idx", "code", "status"),
     )
 
-    id = db.Column(StringUUID, primary_key=True, server_default=db.text("UUID()"))
+    id = db.Column(StringUUID, primary_key=True, default=str(uuid4()))
     app_id = db.Column(StringUUID, nullable=False)
     title = db.Column(db.String(255), nullable=False)
     icon_type = db.Column(db.String(255), nullable=True)
@@ -1396,7 +1397,7 @@ class ApiToken(db.Model):  # type: ignore[name-defined]
         db.Index("api_token_tenant_idx", "tenant_id", "type"),
     )
 
-    id = db.Column(StringUUID, primary_key=True, server_default=db.text("UUID()"))
+    id = db.Column(StringUUID, primary_key=True, default=str(uuid4()))
     app_id = db.Column(StringUUID, nullable=True)
     tenant_id = db.Column(StringUUID, nullable=True)
     type = db.Column(db.String(16), nullable=False)
@@ -1658,7 +1659,7 @@ class Tag(db.Model):  # type: ignore[name-defined]
 
     TAG_TYPE_LIST = ["knowledge", "app"]
 
-    id = db.Column(StringUUID, primary_key=True, server_default=db.text("UUID()"))
+    id = db.Column(StringUUID, primary_key=True, default=str(uuid4()))
     tenant_id = db.Column(StringUUID, nullable=True)
     type = db.Column(db.String(16), nullable=False)
     name = db.Column(db.String(255), nullable=False)
@@ -1674,7 +1675,7 @@ class TagBinding(db.Model):  # type: ignore[name-defined]
         db.Index("tag_bind_tag_id_idx", "tag_id"),
     )
 
-    id = db.Column(StringUUID, primary_key=True, server_default=db.text("UUID()"))
+    id = db.Column(StringUUID, primary_key=True, default=str(uuid4()))
     tenant_id = db.Column(StringUUID, nullable=True)
     tag_id = db.Column(StringUUID, nullable=True)
     target_id = db.Column(StringUUID, nullable=True)
@@ -1689,7 +1690,7 @@ class TraceAppConfig(db.Model):  # type: ignore[name-defined]
         db.Index("trace_app_config_app_id_idx", "app_id"),
     )
 
-    id = db.Column(StringUUID, primary_key=True, server_default=db.text("UUID()"))
+    id = db.Column(StringUUID, primary_key=True, default=str(uuid4()))
     app_id = db.Column(StringUUID, nullable=False)
     tracing_provider = db.Column(db.String(255), nullable=True)
     tracing_config = db.Column(db.JSON, nullable=True)

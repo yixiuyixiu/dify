@@ -12,7 +12,7 @@ class StringUUID(TypeDecorator):
         elif dialect.name == "postgresql":
             return str(value)
         else:
-            return value.hex
+            return str(value)
 
     def load_dialect_impl(self, dialect):
         if dialect.name == "postgresql":

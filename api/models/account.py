@@ -1,5 +1,6 @@
 import enum
 import json
+from uuid import uuid4
 
 from flask_login import UserMixin  # type: ignore
 from sqlalchemy import func
@@ -20,7 +21,7 @@ class Account(UserMixin, db.Model):  # type: ignore[name-defined]
     __tablename__ = "accounts"
     __table_args__ = (db.PrimaryKeyConstraint("id", name="account_pkey"), db.Index("account_email_idx", "email"))
 
-    id = db.Column(StringUUID, primary_key=True, server_default=db.text("UUID()"))
+    id = db.Column(StringUUID, primary_key=True, default=str(uuid4()))
     name = db.Column(db.String(255), nullable=False)
     email = db.Column(db.String(255), nullable=False)
     password = db.Column(db.String(255), nullable=True)
@@ -179,7 +180,7 @@ class Tenant(db.Model):  # type: ignore[name-defined]
     __tablename__ = "tenants"
     __table_args__ = (db.PrimaryKeyConstraint("id", name="tenant_pkey"),)
 
-    id = db.Column(StringUUID, primary_key=True, server_default=db.text("UUID()"))
+    id = db.Column(StringUUID, primary_key=True, default=str(uuid4()))
     name = db.Column(db.String(255), nullable=False)
     encrypt_public_key = db.Column(db.Text)
     plan = db.Column(db.String(255), nullable=False, server_default=db.text("'basic'::character varying"))
@@ -220,7 +221,7 @@ class TenantAccountJoin(db.Model):  # type: ignore[name-defined]
         db.UniqueConstraint("tenant_id", "account_id", name="unique_tenant_account_join"),
     )
 
-    id = db.Column(StringUUID, primary_key=True, server_default=db.text("UUID()"))
+    id = db.Column(StringUUID, primary_key=True, default=str(uuid4()))
     tenant_id = db.Column(StringUUID, nullable=False)
     account_id = db.Column(StringUUID, nullable=False)
     current = db.Column(db.Boolean, nullable=False, server_default=db.text("false"))
@@ -238,7 +239,7 @@ class AccountIntegrate(db.Model):  # type: ignore[name-defined]
         db.UniqueConstraint("provider", "open_id", name="unique_provider_open_id"),
     )
 
-    id = db.Column(StringUUID, primary_key=True, server_default=db.text("UUID()"))
+    id = db.Column(StringUUID, primary_key=True, default=str(uuid4()))
     account_id = db.Column(StringUUID, nullable=False)
     provider = db.Column(db.String(16), nullable=False)
     open_id = db.Column(db.String(255), nullable=False)
