@@ -30,7 +30,7 @@ class WorkflowDailyRunsStatistic(Resource):
         args = parser.parse_args()
 
         sql_query = """SELECT
-    DATE(DATE_TRUNC('day', created_at AT TIME ZONE 'UTC' AT TIME ZONE :tz )) AS date,
+    DATE(created_at) AS date,
     COUNT(id) AS runs
 FROM
     workflow_runs
@@ -92,7 +92,7 @@ class WorkflowDailyTerminalsStatistic(Resource):
         args = parser.parse_args()
 
         sql_query = """SELECT
-    DATE(DATE_TRUNC('day', created_at AT TIME ZONE 'UTC' AT TIME ZONE :tz )) AS date,
+    DATE(created_at) AS date,
     COUNT(DISTINCT workflow_runs.created_by) AS terminal_count
 FROM
     workflow_runs
@@ -154,7 +154,7 @@ class WorkflowDailyTokenCostStatistic(Resource):
         args = parser.parse_args()
 
         sql_query = """SELECT
-    DATE(DATE_TRUNC('day', created_at AT TIME ZONE 'UTC' AT TIME ZONE :tz )) AS date,
+    DATE(created_at) AS date,
     SUM(workflow_runs.total_tokens) AS token_count
 FROM
     workflow_runs

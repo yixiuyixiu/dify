@@ -29,13 +29,13 @@ class DailyMessageStatistic(Resource):
         args = parser.parse_args()
 
         sql_query = """SELECT
-    DATE(DATE_TRUNC('day', created_at AT TIME ZONE 'UTC' AT TIME ZONE :tz )) AS date,
+    DATE(created_at) AS date,
     COUNT(*) AS message_count
 FROM
     messages
 WHERE
     app_id = :app_id"""
-        arg_dict = {"tz": account.timezone, "app_id": app_model.id}
+        arg_dict = {"app_id": app_model.id}
 
         timezone = pytz.timezone(account.timezone)
         utc_timezone = pytz.utc
@@ -86,13 +86,13 @@ class DailyConversationStatistic(Resource):
         args = parser.parse_args()
 
         sql_query = """SELECT
-    DATE(DATE_TRUNC('day', created_at AT TIME ZONE 'UTC' AT TIME ZONE :tz )) AS date,
+    DATE(created_at) AS date,
     COUNT(DISTINCT messages.conversation_id) AS conversation_count
 FROM
     messages
 WHERE
     app_id = :app_id"""
-        arg_dict = {"tz": account.timezone, "app_id": app_model.id}
+        arg_dict = {"app_id": app_model.id}
 
         timezone = pytz.timezone(account.timezone)
         utc_timezone = pytz.utc
@@ -143,13 +143,13 @@ class DailyTerminalsStatistic(Resource):
         args = parser.parse_args()
 
         sql_query = """SELECT
-    DATE(DATE_TRUNC('day', created_at AT TIME ZONE 'UTC' AT TIME ZONE :tz )) AS date,
+    DATE(created_at) AS date,
     COUNT(DISTINCT messages.from_end_user_id) AS terminal_count
 FROM
     messages
 WHERE
     app_id = :app_id"""
-        arg_dict = {"tz": account.timezone, "app_id": app_model.id}
+        arg_dict = {"app_id": app_model.id}
 
         timezone = pytz.timezone(account.timezone)
         utc_timezone = pytz.utc
@@ -200,14 +200,14 @@ class DailyTokenCostStatistic(Resource):
         args = parser.parse_args()
 
         sql_query = """SELECT
-    DATE(DATE_TRUNC('day', created_at AT TIME ZONE 'UTC' AT TIME ZONE :tz )) AS date,
+    DATE(created_at) AS date,
     (SUM(messages.message_tokens) + SUM(messages.answer_tokens)) AS token_count,
     SUM(total_price) AS total_price
 FROM
     messages
 WHERE
     app_id = :app_id"""
-        arg_dict = {"tz": account.timezone, "app_id": app_model.id}
+        arg_dict = {"app_id": app_model.id}
 
         timezone = pytz.timezone(account.timezone)
         utc_timezone = pytz.utc
@@ -274,7 +274,7 @@ FROM
             ON c.id = m.conversation_id
         WHERE
             c.app_id = :app_id"""
-        arg_dict = {"tz": account.timezone, "app_id": app_model.id}
+        arg_dict = {"app_id": app_model.id}
 
         timezone = pytz.timezone(account.timezone)
         utc_timezone = pytz.utc
@@ -346,7 +346,7 @@ LEFT JOIN
     ON mf.message_id=m.id AND mf.rating='like'
 WHERE
     m.app_id = :app_id"""
-        arg_dict = {"tz": account.timezone, "app_id": app_model.id}
+        arg_dict = {"app_id": app_model.id}
 
         timezone = pytz.timezone(account.timezone)
         utc_timezone = pytz.utc
@@ -402,13 +402,13 @@ class AverageResponseTimeStatistic(Resource):
         args = parser.parse_args()
 
         sql_query = """SELECT
-    DATE(DATE_TRUNC('day', created_at AT TIME ZONE 'UTC' AT TIME ZONE :tz )) AS date,
+    DATE(created_at) AS date,
     AVG(provider_response_latency) AS latency
 FROM
     messages
 WHERE
     app_id = :app_id"""
-        arg_dict = {"tz": account.timezone, "app_id": app_model.id}
+        arg_dict = {"app_id": app_model.id}
 
         timezone = pytz.timezone(account.timezone)
         utc_timezone = pytz.utc
@@ -459,7 +459,7 @@ class TokensPerSecondStatistic(Resource):
         args = parser.parse_args()
 
         sql_query = """SELECT
-    DATE(DATE_TRUNC('day', created_at AT TIME ZONE 'UTC' AT TIME ZONE :tz )) AS date,
+    DATE(created_at) AS date,
     CASE
         WHEN SUM(provider_response_latency) = 0 THEN 0
         ELSE (SUM(answer_tokens) / SUM(provider_response_latency))
@@ -468,7 +468,7 @@ FROM
     messages
 WHERE
     app_id = :app_id"""
-        arg_dict = {"tz": account.timezone, "app_id": app_model.id}
+        arg_dict = {"app_id": app_model.id}
 
         timezone = pytz.timezone(account.timezone)
         utc_timezone = pytz.utc
