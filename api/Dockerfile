@@ -28,6 +28,7 @@ RUN apt-get update \
 
 # Install Python dependencies
 COPY pyproject.toml poetry.lock ./
+RUN poetry lock
 RUN poetry install --no-cache --no-root
 
 # production stage
