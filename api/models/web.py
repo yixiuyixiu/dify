@@ -1,3 +1,4 @@
+import uuid
 from uuid import uuid4
 
 from sqlalchemy import func
@@ -15,7 +16,7 @@ class SavedMessage(db.Model):  # type: ignore[name-defined]
         db.Index("saved_message_message_idx", "app_id", "message_id", "created_by_role", "created_by"),
     )
 
-    id = db.Column(StringUUID, primary_key=True, default=str(uuid4()))
+    id = db.Column(StringUUID, primary_key=True, default=lambda: str(uuid.uuid4()))
     app_id = db.Column(StringUUID, nullable=False)
     message_id = db.Column(StringUUID, nullable=False)
     created_by_role = db.Column(db.String(255), nullable=False, server_default=db.text("'end_user'::character varying"))
@@ -34,7 +35,7 @@ class PinnedConversation(db.Model):  # type: ignore[name-defined]
         db.Index("pinned_conversation_conversation_idx", "app_id", "conversation_id", "created_by_role", "created_by"),
     )
 
-    id = db.Column(StringUUID, primary_key=True, default=str(uuid4()))
+    id = db.Column(StringUUID, primary_key=True, default=lambda: str(uuid.uuid4()))
     app_id = db.Column(StringUUID, nullable=False)
     conversation_id: Mapped[str] = mapped_column(StringUUID)
     created_by_role = db.Column(db.String(255), nullable=False, server_default=db.text("'end_user'::character varying"))

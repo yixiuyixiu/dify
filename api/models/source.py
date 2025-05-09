@@ -1,4 +1,5 @@
 import json
+import uuid
 from uuid import uuid4
 
 from sqlalchemy import func
@@ -16,7 +17,7 @@ class DataSourceOauthBinding(db.Model):  # type: ignore[name-defined]
         db.Index("source_info_idx", "source_info", postgresql_using="gin"),
     )
 
-    id = db.Column(StringUUID, primary_key=True, default=str(uuid4()))
+    id = db.Column(StringUUID, primary_key=True, default=lambda: str(uuid.uuid4()))
     tenant_id = db.Column(StringUUID, nullable=False)
     access_token = db.Column(db.String(255), nullable=False)
     provider = db.Column(db.String(255), nullable=False)
@@ -34,7 +35,7 @@ class DataSourceApiKeyAuthBinding(db.Model):  # type: ignore[name-defined]
         db.Index("data_source_api_key_auth_binding_provider_idx", "provider"),
     )
 
-    id = db.Column(StringUUID, primary_key=True, default=str(uuid4()))
+    id = db.Column(StringUUID, primary_key=True, default=lambda: str(uuid.uuid4()))
     tenant_id = db.Column(StringUUID, nullable=False)
     category = db.Column(db.String(255), nullable=False)
     provider = db.Column(db.String(255), nullable=False)

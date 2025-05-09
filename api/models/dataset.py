@@ -8,6 +8,7 @@ import os
 import pickle
 import re
 import time
+import uuid
 from json import JSONDecodeError
 from typing import Any, cast
 from uuid import uuid4
@@ -43,7 +44,7 @@ class Dataset(db.Model):  # type: ignore[name-defined]
     INDEXING_TECHNIQUE_LIST = ["high_quality", "economy", None]
     PROVIDER_LIST = ["vendor", "external", None]
 
-    id = db.Column(StringUUID, primary_key=True, default=str(uuid4()))
+    id = db.Column(StringUUID, primary_key=True, default=lambda: str(uuid.uuid4()))
     tenant_id = db.Column(StringUUID, nullable=False)
     name = db.Column(db.String(255), nullable=False)
     description = db.Column(db.Text, nullable=True)
@@ -920,7 +921,7 @@ class DatasetAutoDisableLog(db.Model):  # type: ignore[name-defined]
         db.Index("dataset_auto_disable_log_created_atx", "created_at"),
     )
 
-    id = db.Column(StringUUID, primary_key=True, default=str(uuid4()))
+    id = db.Column(StringUUID, primary_key=True, default=lambda: str(uuid.uuid4()))
     tenant_id = db.Column(StringUUID, nullable=False)
     dataset_id = db.Column(StringUUID, nullable=False)
     document_id = db.Column(StringUUID, nullable=False)

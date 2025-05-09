@@ -1,3 +1,4 @@
+import uuid
 from enum import Enum
 from uuid import uuid4
 
@@ -51,7 +52,7 @@ class Provider(db.Model):  # type: ignore[name-defined]
         ),
     )
 
-    id = db.Column(StringUUID, primary_key=True, default=str(uuid4()))
+    id = db.Column(StringUUID, primary_key=True, default=lambda: str(uuid.uuid4()))
     tenant_id = db.Column(StringUUID, nullable=False)
     provider_name = db.Column(db.String(255), nullable=False)
     provider_type = db.Column(db.String(40), nullable=False, server_default=db.text("'custom'::character varying"))
@@ -104,7 +105,7 @@ class ProviderModel(db.Model):  # type: ignore[name-defined]
         ),
     )
 
-    id = db.Column(StringUUID, primary_key=True, default=str(uuid4()))
+    id = db.Column(StringUUID, primary_key=True, default=lambda: str(uuid.uuid4()))
     tenant_id = db.Column(StringUUID, nullable=False)
     provider_name = db.Column(db.String(255), nullable=False)
     model_name = db.Column(db.String(255), nullable=False)
@@ -122,7 +123,7 @@ class TenantDefaultModel(db.Model):  # type: ignore[name-defined]
         db.Index("tenant_default_model_tenant_id_provider_type_idx", "tenant_id", "provider_name", "model_type"),
     )
 
-    id = db.Column(StringUUID, primary_key=True, default=str(uuid4()))
+    id = db.Column(StringUUID, primary_key=True, default=lambda: str(uuid.uuid4()))
     tenant_id = db.Column(StringUUID, nullable=False)
     provider_name = db.Column(db.String(255), nullable=False)
     model_name = db.Column(db.String(255), nullable=False)
@@ -138,7 +139,7 @@ class TenantPreferredModelProvider(db.Model):  # type: ignore[name-defined]
         db.Index("tenant_preferred_model_provider_tenant_provider_idx", "tenant_id", "provider_name"),
     )
 
-    id = db.Column(StringUUID, primary_key=True, default=str(uuid4()))
+    id = db.Column(StringUUID, primary_key=True, default=lambda: str(uuid.uuid4()))
     tenant_id = db.Column(StringUUID, nullable=False)
     provider_name = db.Column(db.String(255), nullable=False)
     preferred_provider_type = db.Column(db.String(40), nullable=False)
@@ -153,7 +154,7 @@ class ProviderOrder(db.Model):  # type: ignore[name-defined]
         db.Index("provider_order_tenant_provider_idx", "tenant_id", "provider_name"),
     )
 
-    id = db.Column(StringUUID, primary_key=True, default=str(uuid4()))
+    id = db.Column(StringUUID, primary_key=True, default=lambda: str(uuid.uuid4()))
     tenant_id = db.Column(StringUUID, nullable=False)
     provider_name = db.Column(db.String(255), nullable=False)
     account_id = db.Column(StringUUID, nullable=False)
@@ -182,7 +183,7 @@ class ProviderModelSetting(db.Model):  # type: ignore[name-defined]
         db.Index("provider_model_setting_tenant_provider_model_idx", "tenant_id", "provider_name", "model_type"),
     )
 
-    id = db.Column(StringUUID, primary_key=True, default=str(uuid4()))
+    id = db.Column(StringUUID, primary_key=True, default=lambda: str(uuid.uuid4()))
     tenant_id = db.Column(StringUUID, nullable=False)
     provider_name = db.Column(db.String(255), nullable=False)
     model_name = db.Column(db.String(255), nullable=False)
@@ -204,7 +205,7 @@ class LoadBalancingModelConfig(db.Model):  # type: ignore[name-defined]
         db.Index("load_balancing_model_config_tenant_provider_model_idx", "tenant_id", "provider_name", "model_type"),
     )
 
-    id = db.Column(StringUUID, primary_key=True, default=str(uuid4()))
+    id = db.Column(StringUUID, primary_key=True, default=lambda: str(uuid.uuid4()))
     tenant_id = db.Column(StringUUID, nullable=False)
     provider_name = db.Column(db.String(255), nullable=False)
     model_name = db.Column(db.String(255), nullable=False)
