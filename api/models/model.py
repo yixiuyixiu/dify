@@ -474,7 +474,7 @@ class RecommendedApp(db.Model):  # type: ignore[name-defined]
         db.Index("recommended_app_is_listed_idx", "is_listed", "language"),
     )
 
-    id = db.Column(StringUUID, primary_key=True, server_default=db.text("uuid_generate_v4()"))
+    id = db.Column(StringUUID, primary_key=True, default=lambda: str(uuid.uuid4()))
     app_id = db.Column(StringUUID, nullable=False)
     description = db.Column(db.JSON, nullable=False)
     copyright = db.Column(db.String(255), nullable=False)
@@ -1165,7 +1165,7 @@ class MessageFile(db.Model):  # type: ignore[name-defined]
         self.created_by_role = created_by_role.value
         self.created_by = created_by
 
-    id: Mapped[str] = db.Column(StringUUID, server_default=db.text("uuid_generate_v4()"))
+    id: Mapped[str] = db.Column(StringUUID, primary_key=True, default=lambda: str(uuid.uuid4()))
     message_id: Mapped[str] = db.Column(StringUUID, nullable=False)
     type: Mapped[str] = db.Column(db.String(255), nullable=False)
     transfer_method: Mapped[str] = db.Column(db.String(255), nullable=False)
@@ -1421,7 +1421,7 @@ class UploadFile(db.Model):  # type: ignore[name-defined]
         db.Index("upload_file_tenant_idx", "tenant_id"),
     )
 
-    id: Mapped[str] = db.Column(StringUUID, server_default=db.text("uuid_generate_v4()"))
+    id: Mapped[str] = db.Column(StringUUID, primary_key=True, default=lambda: str(uuid.uuid4()))
     tenant_id: Mapped[str] = db.Column(StringUUID, nullable=False)
     storage_type: Mapped[str] = db.Column(db.String(255), nullable=False)
     key: Mapped[str] = db.Column(db.String(255), nullable=False)
@@ -1483,7 +1483,7 @@ class ApiRequest(db.Model):  # type: ignore[name-defined]
         db.Index("api_request_token_idx", "tenant_id", "api_token_id"),
     )
 
-    id = db.Column(StringUUID, nullable=False, server_default=db.text("uuid_generate_v4()"))
+    id = db.Column(StringUUID, primary_key=True, default=lambda: str(uuid.uuid4()))
     tenant_id = db.Column(StringUUID, nullable=False)
     api_token_id = db.Column(StringUUID, nullable=False)
     path = db.Column(db.String(255), nullable=False)
@@ -1500,7 +1500,7 @@ class MessageChain(db.Model):  # type: ignore[name-defined]
         db.Index("message_chain_message_id_idx", "message_id"),
     )
 
-    id = db.Column(StringUUID, nullable=False, server_default=db.text("uuid_generate_v4()"))
+    id = db.Column(StringUUID, primary_key=True, default=lambda: str(uuid.uuid4()))
     message_id = db.Column(StringUUID, nullable=False)
     type = db.Column(db.String(255), nullable=False)
     input = db.Column(db.Text, nullable=True)
@@ -1516,7 +1516,7 @@ class MessageAgentThought(db.Model):  # type: ignore[name-defined]
         db.Index("message_agent_thought_message_chain_id_idx", "message_chain_id"),
     )
 
-    id = db.Column(StringUUID, nullable=False, server_default=db.text("uuid_generate_v4()"))
+    id = db.Column(StringUUID, primary_key=True, default=lambda: str(uuid.uuid4()))
     message_id = db.Column(StringUUID, nullable=False)
     message_chain_id = db.Column(StringUUID, nullable=True)
     position = db.Column(db.Integer, nullable=False)
@@ -1629,7 +1629,7 @@ class DatasetRetrieverResource(db.Model):  # type: ignore[name-defined]
         db.Index("dataset_retriever_resource_message_id_idx", "message_id"),
     )
 
-    id = db.Column(StringUUID, nullable=False, server_default=db.text("uuid_generate_v4()"))
+    id = db.Column(StringUUID, primary_key=True, default=lambda: str(uuid.uuid4()))
     message_id = db.Column(StringUUID, nullable=False)
     position = db.Column(db.Integer, nullable=False)
     dataset_id = db.Column(StringUUID, nullable=False)
