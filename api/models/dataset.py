@@ -392,9 +392,9 @@ class Document(db.Model):  # type: ignore[name-defined]
     @property
     def hit_count(self):
         return (
-            DocumentSegment.query.with_entities(func.coalesce(func.sum(DocumentSegment.hit_count)))
-            .filter(DocumentSegment.document_id == self.id)
-            .scalar()
+            int(DocumentSegment.query.with_entities(func.coalesce(func.sum(DocumentSegment.hit_count)))
+                .filter(DocumentSegment.document_id == self.id)
+                .scalar())
         )
 
     @property
