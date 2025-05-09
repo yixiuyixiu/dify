@@ -1,3 +1,4 @@
+import json
 import logging
 from argparse import ArgumentTypeError
 from datetime import UTC, datetime
@@ -622,7 +623,7 @@ class DocumentDetailApi(DocumentResource):
                 "indexing_status": document.indexing_status,
                 "completed_at": int(document.completed_at.timestamp()) if document.completed_at else None,
                 "updated_at": int(document.updated_at.timestamp()) if document.updated_at else None,
-                "indexing_latency": document.indexing_latency,
+                # "indexing_latency": document.indexing_latency,
                 "error": document.error,
                 "enabled": document.enabled,
                 "disabled_at": int(document.disabled_at.timestamp()) if document.disabled_at else None,
@@ -635,6 +636,7 @@ class DocumentDetailApi(DocumentResource):
                 "doc_form": document.doc_form,
                 "doc_language": document.doc_language,
             }
+            print("输出docuemnt返回内容",json.dumps(response))
         else:
             dataset_process_rules = DatasetService.get_process_rules(dataset_id)
             document_process_rules = document.dataset_process_rule.to_dict()
