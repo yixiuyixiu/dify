@@ -201,7 +201,7 @@ def validate_and_get_api_token(scope: str | None = None):
                 ApiToken.type == scope,
             )
             .values(last_used_at=current_time)
-            .returning(ApiToken)
+            # .returning(ApiToken)
         )
         result = session.execute(update_stmt)
         api_token = result.scalar_one_or_none()
