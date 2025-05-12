@@ -260,7 +260,7 @@ class AverageSessionInteractionStatistic(Resource):
         args = parser.parse_args()
 
         sql_query = """SELECT
-    DATE(DATE_TRUNC('day', c.created_at AT TIME ZONE 'UTC' AT TIME ZONE :tz )) AS date,
+    DATE(created_at) AS date,
     AVG(subquery.message_count) AS interactions
 FROM
     (
@@ -336,7 +336,7 @@ class UserSatisfactionRateStatistic(Resource):
         args = parser.parse_args()
 
         sql_query = """SELECT
-    DATE(DATE_TRUNC('day', m.created_at AT TIME ZONE 'UTC' AT TIME ZONE :tz )) AS date,
+    DATE(created_at) AS date,
     COUNT(m.id) AS message_count,
     COUNT(mf.id) AS feedback_count
 FROM

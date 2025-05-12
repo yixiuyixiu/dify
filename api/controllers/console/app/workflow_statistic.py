@@ -226,7 +226,7 @@ class WorkflowAverageAppInteractionStatistic(Resource):
 FROM
     (
         SELECT
-            DATE(DATE_TRUNC('day', c.created_at AT TIME ZONE 'UTC' AT TIME ZONE :tz )) AS date,
+            DATE(created_at) AS date,
             c.created_by,
             COUNT(c.id) AS interactions
         FROM
