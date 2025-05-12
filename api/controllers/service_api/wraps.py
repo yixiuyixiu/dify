@@ -204,15 +204,15 @@ def validate_and_get_api_token(scope: str | None = None):
             # .returning(ApiToken)
         )
         result = session.execute(update_stmt)
-        api_token = result.scalar_one_or_none()
+        # api_token = result.scalar_one_or_none()
 
+        # if not api_token:
+        stmt = select(ApiToken).where(ApiToken.token == auth_token, ApiToken.type == scope)
+        api_token = session.scalar(stmt)
         if not api_token:
-            stmt = select(ApiToken).where(ApiToken.token == auth_token, ApiToken.type == scope)
-            api_token = session.scalar(stmt)
-            if not api_token:
-                raise Unauthorized("Access token is invalid")
-        else:
-            session.commit()
+           raise Unauthorized("Access token is invalid")
+        # else:
+        session.commit()
 
     return api_token
 
